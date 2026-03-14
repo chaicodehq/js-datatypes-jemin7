@@ -31,4 +31,44 @@
  */
 export function fixBollywoodTitle(title) {
   // Your code here
+  if (typeof title !== "string") {
+    return "";
+  }
+
+  title = title.trim();
+
+  if (title.length === 0) {
+    return "";
+  }
+  let list = [
+    "ka",
+    "ki",
+    "ke",
+    "se",
+    "aur",
+    "ya",
+    "the",
+    "of",
+    "in",
+    "a",
+    "an",
+  ];
+  let words = title.split(" ");
+
+  words = words.filter((word) => word !== "");
+
+  for (let index = 0; index < words.length; index++) {
+    let element = words[index];
+    if (index === 0) {
+      words[index] =
+        element.charAt(0).toUpperCase() + element.slice(1).toLowerCase();
+    } else if (list.includes(element.toLowerCase())) {
+      words[index] = element.toLowerCase();
+    } else {
+      words[index] =
+        element.charAt(0).toUpperCase() + element.slice(1).toLowerCase();
+    }
+  }
+
+  return title = words.join(" ")
 }

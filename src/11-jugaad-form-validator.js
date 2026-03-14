@@ -63,4 +63,88 @@
  */
 export function validateForm(formData) {
   // Your code here
+  const data = formData || {};
+  const errors = {};
+
+  if (
+    typeof data.name !== "string" ||
+    data.name.trim().length < 2 ||
+    data.name.trim().length > 50
+  ) {
+    errors.name = "Name must be 2-50 characters";
+  }
+
+  if (typeof data.email !== "string") {
+    errors.email = "Invalid email format";
+  } else {
+    const atIndex = data.email.indexOf("@");
+    const lastAtIndex = data.email.lastIndexOf("@");
+    const dotAfterAt = data.email.indexOf(".", atIndex);
+
+    if (atIndex === -1 || atIndex !== lastAtIndex || dotAfterAt === -1) {
+      errors.email = "Invalid email format";
+    }
+  }
+
+  const validStarts = ["6", "7", "8", "9"];
+  if (
+    typeof data.phone !== "string" ||
+    data.phone.length !== 10 ||
+    !validStarts.includes(data.phone[0])
+  ) {
+    errors.phone = "Invalid Indian phone number";
+  } else {
+    for (let i = 0; i < 10; i++) {
+      if (data.phone[i] < "0" || data.phone[i] > "9") {
+        errors.phone = "Invalid Indian phone number";
+        break;
+      }
+    }
+  }
+
+  let age = data.age;
+  if (typeof age === "string") {
+    age = parseInt(age, 10);
+  }
+
+  if (
+    typeof age !== "number" ||
+    isNaN(age) ||
+    !Number.isInteger(age) ||
+    age < 16 ||
+    age > 100
+  ) {
+    errors.age = "Age must be an integer between 16 and 100";
+  }
+
+  if (
+    typeof data.pincode !== "string" ||
+    data.pincode.length !== 6 ||
+    data.pincode.startsWith("0")
+  ) {
+    errors.pincode = "Invalid Indian pincode";
+  } else {
+    for (let i = 0; i < 6; i++) {
+      if (data.pincode[i] < "0" || data.pincode[i] > "9") {
+        errors.pincode = "Invalid Indian pincode";
+        break;
+      }
+    }
+  }
+
+  const state = data?.state ?? "";
+  if (typeof state !== "string" || state.trim().length === 0) {
+    errors.state = "State is required";
+  }
+
+  if (Boolean(data.agreeTerms) !== true) {
+    errors.agreeTerms = "Must agree to terms";
+  }
+
+  const isValid = Object.keys(errors).length === 0;
+
+  return {
+    isValid: isValid,
+    errors: errors,
+  };
 }
